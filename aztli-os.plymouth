@@ -1,0 +1,10 @@
+[Plymouth Theme]
+Name=Aztli os
+Description=OS X like boot splash
+ModuleName=script
+
+[script]
+ImageDir=/lib/plymouth/themes/Aztli
+ScriptFile=/lib/plymouth/themes/Aztli/aztli-os.script
+
+
