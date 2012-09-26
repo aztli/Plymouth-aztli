@@ -1,0 +1,7 @@
+# Evitar archivos de respaldo
+
+.*
+\#*
+*~
+
+!.gitignore

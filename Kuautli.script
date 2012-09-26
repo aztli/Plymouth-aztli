@@ -1,0 +1,47 @@
+Window.SetBackgroundTopColor(0.1,0.1,0.1);
+Window.SetBackgroundBottomColor(0,0,0);
+
+Kuautli.NumSprites = 4;
+Kuautli.Sprite = Sprite();
+
+
+
+indice = 0; # Indice de imagen actual;
+
+if (Plymouth.GetMode() == "boot"){
+   for(i = 0; i < Kuautli.NumSprites; i++)
+    Kuautli.Imagenes[i] = Image("kuautli-" + i + ".png").Scale(300,300);
+
+   PosicionBaseX = Window.GetWidth();
+   IndiceMovimiento = -2;
+   Limite = 0;
+   
+} else {
+  for(i = 0; i < Kuautli.NumSprites; i++)
+    Kuautli.Imagenes[i] = Image("kuautli-F-" + i + ".png").Scale(300,300);
+
+   PosicionBaseX = 0;
+   IndiceMovimiento = 2;
+   Limite = Window.GetWidth();
+}
+
+PosicionX = PosicionBaseX;
+
+PosicionY = Window.GetHeight() / 2;
+
+fun refresh(){
+    if (indice > Kuautli.NumSprites)
+       indice = 0;
+    
+    if (PosicionX == Limite)
+       PosicionX = PosicionBaseX;
+
+     PosicionX += IndiceMovimiento;
+
+    Kuautli.Sprite.SetImage(Kuautli.Imagenes[Math.Int(indice)]);
+    indice += 0.08;    
+    Kuautli.Sprite.SetX(PosicionX);
+    Kuautli.Sprite.SetY(PosicionY - (Math.Sqrt(Math.Abs(PosicionX)) * 10));
+}
+
+Plymouth.SetRefreshFunction(refresh);

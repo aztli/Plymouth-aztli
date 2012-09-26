@@ -1,0 +1,8 @@
+[Plymouth Theme]
+Name = Kuautli
+Description = Simulación del vuelo de un aguila.
+ModuleName = script
+
+[script]
+ImageDir = /lib/plymouth/themes/Kuautli/Img
+ScriptFile = /lib/plymouth/themes/Kuautli/Kuautli.script
