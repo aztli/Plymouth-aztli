@@ -5,13 +5,13 @@ Kuautli.NumSprites = 14;
 Kuautli.Sprite = Sprite();
 
 
-
+opacity = 0;
 indice = 0; # Indice de imagen actual;
 
-Logo = Image("aztli-kuautli.png");
-LogoSprite = Sprite(Logo);
-LogoSprite.SetPosition(Window.GetWidth()/2, Window.GetHeight()/2,100);
-
+Logo.Imagen = Image("aztli-kuautli.png");
+LogoSprite = Sprite(Logo.Imagen);
+LogoSprite.SetPosition((Window.GetWidth()/2) - (Logo.Imagen.GetWidth() / 2 ), (Window.GetHeight()/2 ) - (Logo.Imagen.GetHeight()/2),100);
+Logo.opacity_angle = 0;
 if (Plymouth.GetMode() == "boot"){
    PosicionBaseX = Window.GetWidth();
 
@@ -50,6 +50,13 @@ fun refresh(){
     indice += 0.25;    
     Kuautli.Sprite.SetX(PosicionX);
     Kuautli.Sprite.SetY(PosicionY - (Math.Sqrt(Math.Abs(PosicionX)) * 10) - 50);
+    }else {
+      Logo.opacity_angle += ((2 * 3.14) / 50) * 0.5; # 0.5 HZ
+        min_opacity = 0.3;
+        opacity = (Math.Cos(Logo.opacity_angle) + 1) / 2;
+        opacity *= 1 - min_opacity;
+        opacity += min_opacity;
+        LogoSprite.SetOpacity(opacity);
     }
 
     } else{ 
@@ -63,6 +70,14 @@ fun refresh(){
 	indice += 0.25;    
 	Kuautli.Sprite.SetX(PosicionX);
 	Kuautli.Sprite.SetY(PosicionY - (Math.Sqrt(Math.Abs(PosicionX)) * 10 ) - 5);
+
+    } else {
+        Logo.opacity_angle += ((2 * 3.14) / 50) * 0.5; # 0.5 HZ
+        min_opacity = 0.3;
+        opacity = (Math.Cos(Logo.opacity_angle) + 1) / 2;
+        opacity *= 1 - min_opacity;
+        opacity += min_opacity;
+        LogoSprite.SetOpacity(opacity);
     }
 }
 }
