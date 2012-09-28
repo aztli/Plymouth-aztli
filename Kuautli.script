@@ -8,6 +8,10 @@ Kuautli.Sprite = Sprite();
 
 indice = 0; # Indice de imagen actual;
 
+Logo = Image("aztli-kuautli.png");
+LogoSprite = Sprite(Logo);
+LogoSprite.SetPosition(Window.GetWidth()/2, Window.GetHeight()/2,100);
+
 if (Plymouth.GetMode() == "boot"){
    PosicionBaseX = Window.GetWidth();
 
