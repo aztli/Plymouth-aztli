@@ -13,27 +13,28 @@ LogoSprite = Sprite(Logo.Imagen);
 LogoSprite.SetPosition((Window.GetWidth()/2) - (Logo.Imagen.GetWidth() / 2 ), (Window.GetHeight()/2 ) - (Logo.Imagen.GetHeight()/2),100);
 Logo.opacity_angle = 0;
 if (Plymouth.GetMode() == "boot"){
-   PosicionBaseX = Window.GetWidth();
+   PosicionBaseX = Window.GetWidth() + 50;
 
    for(i = 0; i < Kuautli.NumSprites; i++)
-    Kuautli.Imagenes[i] = Image("Kuautli-" + i + ".png").Scale(300,300);
+    Kuautli.Imagenes[i] = Image("Kuautli-" + i + ".png").Scale(500,400);
 
 
    IndiceMovimiento = -3;
    Limite = 0;
-   
+   PosicionY = Window.GetHeight() / 2;
 } else {
   for(i = 0; i < Kuautli.NumSprites; i++)
-    Kuautli.Imagenes[i] = Image("Kuautli-" + i + "-F.png").Scale(300,300);
+    Kuautli.Imagenes[i] = Image("Kuautli-" + i + "-F.png").Scale(500,400);
 
    PosicionBaseX = (Window.GetWidth() / 2) - Kuautli.Imagenes[0].GetWidth();
    IndiceMovimiento = 3;
    Limite = Window.GetWidth() + 100;
+   PosicionY = (Window.GetHeight() / 2 ) - Logo.Imagen.GetHeight() ;
 }
 
 PosicionX = PosicionBaseX;
 
-PosicionY = Window.GetHeight() / 2;
+
 
 fun refresh(){
     if (indice > Kuautli.NumSprites)
@@ -41,7 +42,7 @@ fun refresh(){
     
 
        if (Plymouth.GetMode() == "boot"){
-    if (! ((PosicionX < (Window.GetWidth() / 3)) && (Math.Int(indice ) == 0) )){
+    if (! ((PosicionX < (Window.GetWidth() / 5) - 20) && (Math.Int(indice ) == 0) )){
        PosicionX += IndiceMovimiento;
            if (PosicionX == Limite)
        PosicionX = PosicionBaseX;
@@ -49,7 +50,7 @@ fun refresh(){
     Kuautli.Sprite.SetImage(Kuautli.Imagenes[Math.Int(indice)]);
     indice += 0.25;    
     Kuautli.Sprite.SetX(PosicionX);
-    Kuautli.Sprite.SetY(PosicionY - (Math.Sqrt(Math.Abs(PosicionX)) * 10) - 50);
+    Kuautli.Sprite.SetY(PosicionY - (Math.Sqrt(Math.Abs(PosicionX)) * 10) - 100);
     }else {
       Logo.opacity_angle += ((2 * 3.14) / 50) * 0.5; # 0.5 HZ
         min_opacity = 0.3;
