@@ -1,5 +1,5 @@
-Window.SetBackgroundTopColor(0.1,0.1,0.1);
-Window.SetBackgroundBottomColor(0,0,0);
+Window.SetBackgroundTopColor(0.1 ,0.1 ,0.1);
+Window.SetBackgroundBottomColor(0, 0, 0);
 
 Kuautli.NumSprites = 14;
 Kuautli.Sprite = Sprite();
@@ -8,79 +8,81 @@ Kuautli.Sprite = Sprite();
 opacity = 0;
 indice = 0; # Indice de imagen actual;
 
+# Letrero Aztli
 Logo.Imagen = Image("aztli-kuautli.png");
 LogoSprite = Sprite(Logo.Imagen);
-LogoSprite.SetPosition((Window.GetWidth()/2) - (Logo.Imagen.GetWidth() / 2 ), (Window.GetHeight()/2 ) - (Logo.Imagen.GetHeight()/2),100);
+LogoSprite.SetPosition((Window.GetWidth()/2) - (Logo.Imagen.GetWidth() / 2 ),
+                       (Window.GetHeight()/2 ) - (Logo.Imagen.GetHeight()/2),100);
 Logo.opacity_angle = 0;
+
+# Inicializar elementos
 if (Plymouth.GetMode() == "boot"){
-   PosicionBaseX = Window.GetWidth() + 50;
+    # Array de imagenes de la figura principal
+    for(i = 0; i < Kuautli.NumSprites; i++)
+        Kuautli.Imagenes[i] = Image("Kuautli-" + i + ".png").Scale(500,400);
 
-   for(i = 0; i < Kuautli.NumSprites; i++)
-    Kuautli.Imagenes[i] = Image("Kuautli-" + i + ".png").Scale(500,400);
-
-
-   IndiceMovimiento = -3;
-   Limite = 0;
-   PosicionY = Window.GetHeight() / 2;
+    # Posicion de partida del aguila
+    PosicionBaseX = Window.GetWidth() + 50;
+    IndiceMovimiento = -3; # incremento de la posicion x en pantalla
+    // Limite = 0;
+    PosicionY = Window.GetHeight() / 2;
 } else {
-  for(i = 0; i < Kuautli.NumSprites; i++)
-    Kuautli.Imagenes[i] = Image("Kuautli-" + i + "-F.png").Scale(500,400);
+    # Array de imagenes de la figura principal
+    for(i = 0; i < Kuautli.NumSprites; i++)
+        Kuautli.Imagenes[i] = Image("Kuautli-" + i + "-F.png").Scale(500,400);
 
-   PosicionBaseX = (Window.GetWidth() / 2) - Kuautli.Imagenes[0].GetWidth();
-   IndiceMovimiento = 3;
-   Limite = Window.GetWidth() + 100;
-   PosicionY = (Window.GetHeight() / 2 ) - Logo.Imagen.GetHeight() ;
+    # Array de imagenes de la figura principal
+    PosicionBaseX = (Window.GetWidth() / 2) - Kuautli.Imagenes[0].GetWidth();
+    IndiceMovimiento = 3; # Array de imagenes de la figura principal
+    // Limite = Window.GetWidth() + 100;
+    # Posicion de partida Y
+    PosicionY = (Window.GetHeight() / 2 ) - Logo.Imagen.GetHeight() ;
 }
 
 PosicionX = PosicionBaseX;
 
-
-
-fun refresh(){
-    if (indice > Kuautli.NumSprites)
-       indice = 0;
-    
-
-       if (Plymouth.GetMode() == "boot"){
-    if (! ((PosicionX < (Window.GetWidth() / 5) - 20) && (Math.Int(indice ) == 0) )){
-       PosicionX += IndiceMovimiento;
-           if (PosicionX == Limite)
-       PosicionX = PosicionBaseX;
-
-    Kuautli.Sprite.SetImage(Kuautli.Imagenes[Math.Int(indice)]);
-    indice += 0.25;    
-    Kuautli.Sprite.SetX(PosicionX);
-    Kuautli.Sprite.SetY(PosicionY - (Math.Sqrt(Math.Abs(PosicionX)) * 10) - 100);
-    }else {
-      Logo.opacity_angle += ((2 * 3.14) / 50) * 0.5; # 0.5 HZ
-        min_opacity = 0.3;
-        opacity = (Math.Cos(Logo.opacity_angle) + 1) / 2;
-        opacity *= 1 - min_opacity;
-        opacity += min_opacity;
-        LogoSprite.SetOpacity(opacity);
-    }
-
-    } else{ 
-    if (! ((Plymouth.GetMode() == "shutdown") && (PosicionX > Window.GetWidth()) && (Math.Int(indice) == 0))){
-        PosicionX += IndiceMovimiento;
-
-    if (PosicionX == Limite)
-       PosicionX = PosicionBaseX;
-
-    	Kuautli.Sprite.SetImage(Kuautli.Imagenes[Math.Int(indice)]);
-	indice += 0.25;    
-	Kuautli.Sprite.SetX(PosicionX);
-	Kuautli.Sprite.SetY(PosicionY - (Math.Sqrt(Math.Abs(PosicionX)) * 10 ) - 5);
-
-    } else {
+fun parpadeo(){
         Logo.opacity_angle += ((2 * 3.14) / 50) * 0.5; # 0.5 HZ
         min_opacity = 0.3;
         opacity = (Math.Cos(Logo.opacity_angle) + 1) / 2;
         opacity *= 1 - min_opacity;
         opacity += min_opacity;
         LogoSprite.SetOpacity(opacity);
-    }
 }
+
+fun refresh(){
+    if (indice > Kuautli.NumSprites)  # Reinicia si se ha sobrepasado el
+       indice = 0;                    # el numero total de sprites
+
+    if (Plymouth.GetMode() == "boot"){
+        if (! ((PosicionX < (Window.GetWidth() / 5) - 20) &&
+           (Math.Int(indice ) == 0) )){
+           PosicionX += IndiceMovimiento;
+
+        /* if (PosicionX == Limite)
+           PosicionX = PosicionBaseX;*/
+
+           Kuautli.Sprite.SetImage(Kuautli.Imagenes[Math.Int(indice)]);
+           indice += 0.25;
+           Kuautli.Sprite.SetX(PosicionX);
+           Kuautli.Sprite.SetY(PosicionY - (Math.Sqrt(Math.Abs(PosicionX)) * 10) - 100);
+    }else
+        parpadeo();
+    } else{
+        if (! ((Plymouth.GetMode() == "shutdown") && (PosicionX > Window.GetWidth()) &&
+           (Math.Int(indice) == 0))){
+           PosicionX += IndiceMovimiento;
+
+        /* if (PosicionX == Limite)
+              PosicionX = PosicionBaseX;*/
+
+           Kuautli.Sprite.SetImage(Kuautli.Imagenes[Math.Int(indice)]);
+	   indice += 0.25;
+	   Kuautli.Sprite.SetX(PosicionX);
+	   Kuautli.Sprite.SetY(PosicionY - (Math.Sqrt(Math.Abs(PosicionX)) * 10 ) - 5);
+        } else
+           parpadeo();
+    }
 }
 
 Plymouth.SetRefreshFunction(refresh);
@@ -90,36 +92,36 @@ fun dialog_setup()
     local.box;
     local.lock;
     local.entry;
-    
+
     box.image = Image("box.png");
     lock.image = Image("lock.png");
     entry.image = Image("entry.png");
-    
+
     box.sprite = Sprite(box.image);
     box.x = Window.GetWidth() / 2 + Window.GetWidth() / 6 - box.image.GetWidth ()/2;
     box.y = Window.GetHeight() / 2 + Window.GetHeight() / 3 - box.image.GetHeight()/2;
     box.z = 10000;
     box.sprite.SetPosition(box.x, box.y, box.z);
-    
+
     lock.sprite = Sprite(lock.image);
     lock.x = box.x + box.image.GetWidth()/2 - (lock.image.GetWidth() + entry.image.GetWidth()) / 2;
     lock.y = box.y + box.image.GetHeight()/2 - lock.image.GetHeight()/2;
     lock.z = box.z + 1;
     lock.sprite.SetPosition(lock.x, lock.y, lock.z);
-    
+
     entry.sprite = Sprite(entry.image);
     entry.x = lock.x + lock.image.GetWidth();
     entry.y = box.y + box.image.GetHeight()/2 - entry.image.GetHeight()/2;
     entry.z = box.z + 1;
     entry.sprite.SetPosition(entry.x, entry.y, entry.z);
-    
+
     global.dialog.box = box;
     global.dialog.lock = lock;
     global.dialog.entry = entry;
     global.dialog.bullet_image = Image("bullet.png");
     dialog_opacity (1);
   }
-    
+
 fun dialog_opacity(opacity)
   {
     dialog.box.sprite.SetOpacity (opacity);
